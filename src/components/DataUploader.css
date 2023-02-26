@@ -1,0 +1,30 @@
+.row {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+h1{
+  font-size: 2em;
+  font-weight: bold;
+  color: red;
+  text-align: center;
+  margin: 0;
+  padding: 0;
+}
+.instructionText1 {
+  padding-left: 200px;
+}
+.uploaderButton{
+  margin: 0 auto;
+  display: block;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  text-align: center;
+  text-decoration: none;
+  align-items: center;
+  justify-content: center;
+  padding-top: 20px;
+  padding-right: 390px;
+}

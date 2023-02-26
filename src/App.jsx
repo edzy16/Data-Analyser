@@ -1,34 +1,40 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import './App.css'
+import React from "react";
+import DataUploader from "./components/DataUploader";
+import "./App.css";
+import DataAnalyzer from "./components/DataAnalyzer";
 
 function App() {
-  const [count, setCount] = useState(0)
-
+  const data = [
+    {
+      Var1: "A",
+      Var2: 23,
+      Var3: "B",
+      Var4: 56,
+      Var5: "C",
+      Var6: 34,
+      Var7: "B",
+      Var8: 65,
+      Var9: "A",
+    },
+    {
+      Var1: "B",
+      Var2: 45,
+      Var3: "A",
+      Var4: 12,
+      Var5: "C",
+      Var6: 21,
+      Var7: "C",
+      Var8: 34,
+      Var9: "B",
+    },
+    // add more rows as needed
+  ];
   return (
-    <div className="App">
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src="/vite.svg" className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://reactjs.org" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+    <div className="app">
+      <DataUploader />
+      <DataAnalyzer data={data} />
     </div>
-  )
+  );
 }
 
-export default App
+export default App;
