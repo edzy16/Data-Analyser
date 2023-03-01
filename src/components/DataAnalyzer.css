@@ -33,8 +33,34 @@
   margin-bottom: 5px;
 }
 
+.two-d-graph {
+  width: 80%;
+  max-width: 800px;
+  margin-top: 30px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.graph-selectors {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+.graph-selectors select {
+  font-size: 16px;
+  padding: 8px;
+  margin-right: 10px;
+}
+
 @media only screen and (max-width: 600px) {
   .chart-container {
+    width: 100%;
+  }
+
+  .two-d-graph {
     width: 100%;
   }
 }

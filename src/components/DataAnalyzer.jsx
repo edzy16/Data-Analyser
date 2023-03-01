@@ -1,7 +1,7 @@
-import React from "react";
-import { Bar, Line } from "react-chartjs-2";
+import React, { useState } from "react";
+import { Scatter, ScatterChart, XAxis, YAxis, Cell, Tooltip } from "recharts";
 import { Chart, CategoryScale, LinearScale } from "chart.js/auto";
-import "./DataAnalyzer.css"
+import "./DataAnalyzer.css";
 
 Chart.register(CategoryScale, LinearScale);
 
@@ -9,9 +9,14 @@ function DataAnalyzer({ data }) {
   const numColumns = [];
   const catColumns = [];
   const stats = {};
+  const columns = Object.keys(data[0]);
+  const colors = ["#8884d8", "#82ca9d", "#ffc658", "#FF0000", "#0000FF"];
+
+  const [xAxis, setXAxis] = useState("");
+  const [yAxis, setYAxis] = useState("");
 
   // Loop through the first row to determine the column types
-  Object.keys(data[0]).forEach((column) => {
+  columns.forEach((column) => {
     const isNumeric = data.every((row) => !isNaN(row[column]));
     if (isNumeric) {
       numColumns.push(column);
@@ -48,70 +53,87 @@ function DataAnalyzer({ data }) {
   });
 
   return (
-    <div>
+  <div className="data-analysis-container">
+    <div className="column-container">
       {numColumns.map((column) => (
-        <div key={column}>
-          <p>{column}</p>
-          <p>Mean: {stats[column].mean}</p>
-          <p>Max: {stats[column].max}</p>
-          <p>Min: {stats[column].min}</p>
-          <Bar
-            data={{
-              labels: data.map((row) => row[column]),
-              datasets: [
-                {
-                  label: column,
-                  data: data.map((row) => row[column]),
-                  backgroundColor: "rgba(54, 162, 235, 0.2)",
-                  borderColor: "rgba(54, 162, 235, 1)",
-                  borderWidth: 1,
-                },
-              ],
-            }}
-            options={{
-              scales: {
-                y: {
-                  beginAtZero: true,
-                },
-              },
-            }}
-          />
+        <div key={column} className="column-box">
+          <div className="column-title">{column}</div>
+          <div>Mean: {stats[column].mean}</div>
+          <div>Max: {stats[column].max}</div>
+          <div>Min: {stats[column].min}</div>
+          <div className="data-points">
+            {data.map((row, index) => (
+              <div key={index}>{row[column]}</div>
+            ))}
+          </div>
         </div>
       ))}
       {catColumns.map((column) => (
-        <div key={column}>
-          <p>{column}</p>
-          <ul>
+        <div key={column} className="column-box">
+          <div className="column-title">{column}</div>
+          <ul className="category-list">
             {stats[column].categories.map((category, index) => (
               <li key={category}>
                 {category}: {stats[column].counts[index]}
               </li>
             ))}
           </ul>
-          <Line
-            data={{
-              labels: stats[column].categories,
-              datasets: [
-                {
-                  label: column,
-                  data: stats[column].counts,
-                  fill: false,
-                  borderColor: "rgba(255, 99, 132, 1)",
-                  borderWidth: 1,
-                },
-              ],
-            }}
-            options={{
-              scales: {
-                y: {
-                  beginAtZero: true,
-                },
-              },
-            }}
-          />
+          <div className="data-points">
+            {data.map((row, index) => (
+              <div key={index}>{row[column]}</div>
+            ))}
+          </div>
         </div>
       ))}
     </div>
+    <div className="chart-container">
+      <div className="chart-header">
+        <select
+          className="chart-select"
+          onChange={(e) => setXAxis(e.target.value)}
+        >
+          <option value="">Select X-axis</option>
+          {columns.map((column) => (
+            <option key={column} value={column}>
+              {column}
+            </option>
+          ))}
+        </select>
+        <select
+          className="chart-select"
+          onChange={(e) => setYAxis(e.target.value)}
+        >
+          <option value="">Select Y-axis</option>
+          {columns.map((column) => (
+            <option key={column} value={column}>
+              {column}
+            </option>
+          ))}
+        </select>
+      </div>
+      <div className="chart-body">
+        {xAxis && yAxis && (
+          <ScatterChart
+            width={800}
+            height={400}
+            margin={{ top: 20, right: 20, bottom: 20, left: 20 }}
+          >
+            <XAxis dataKey={xAxis} type="number" name={xAxis} />
+            <YAxis dataKey={yAxis} type="number" name={yAxis} />
+            <Scatter data={data}>
+              {data.map((entry, index) => (
+                <Cell
+                  key={`cell-${index}`}
+                  fill={colors[index % colors.length]}
+                />
+              ))}
+            </Scatter>
+            <Tooltip cursor={{ strokeDasharray: "3 3" }} />
+          </ScatterChart>
+        )}
+      </div>
+    </div>
+  </div>
   );
 }
 
