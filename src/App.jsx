@@ -1,38 +1,29 @@
 import React from "react";
-import DataUploader from "./components/DataUploader";
 import "./App.css";
-import DataAnalyzer from "./components/DataAnalyzer";
+import DataTable from "./components/DataTable";
+import DataTaker from "./components/DataTaker";
+import DataVisualizer from "./components/DataVisualizer";
+
 
 function App() {
-  const data = [
-    {
-      Var1: "A",
-      Var2: 23,
-      Var3: "B",
-      Var4: 56,
-      Var5: "C",
-      Var6: 34,
-      Var7: "B",
-      Var8: 65,
-      Var9: "A",
-    },
-    {
-      Var1: "B",
-      Var2: 45,
-      Var3: "A",
-      Var4: 12,
-      Var5: "C",
-      Var6: 21,
-      Var7: "C",
-      Var8: 34,
-      Var9: "B",
-    },
-    // add more rows as needed
-  ];
+  const sampleData = `Var Name,Type,Insight,Blank count
+  Var1,Categorical,Category count=5 A=23 B=33 C=13,5
+  Var2,Numeric,Min=12 Max=65 Average=43,2
+  Var3,Categorical,Category count=5 A=23 B=33 C=13,0
+  Var4,Numeric,Min=12 Max=65 Average=43,0
+  Var5,Categorical,Category count=5 A=23 B=33 C=13,0
+  Var6,Numeric,Min=12 Max=65 Average=43,0
+  Var7,Categorical,Category count=5 A=23 B=33 C=13,0
+  Var8,Numeric,Min=12 Max=65 Average=43,0
+  Var9, Categorical, Category count = 5 A = 23 B = 33 C = 13, 0`;
+
+  const rows = sampleData.split("\n").map((row) => row.split(","));
+
   return (
     <div className="app">
-      <DataUploader />
-      <DataAnalyzer data={data} />
+      <DataTaker />
+      <DataTable data={rows} />
+      <DataVisualizer data={rows} />
     </div>
   );
 }
