@@ -1,47 +1,54 @@
 import React, { useState } from "react";
 
-export default function DataVisualizer({ data }) {
-  const headers = data[0];
+function DataVisualizer({ data }) {
+  const [xVar, setXVar] = useState("");
+  const [yVar, setYVar] = useState("");
 
-  const [xAxis, setXAxis] = useState(headers[0]);
-  const [yAxis, setYAxis] = useState(headers[1]);
+  // extract variable names from the sample data
+  const header = data[0];
+  const variableNames = header.map((name) => name.trim());
 
-  const handleXAxisChange = (e) => {
-    const selectedXAxis = e.target.value;
-    if (selectedXAxis !== yAxis) {
-      setXAxis(selectedXAxis);
+  // create dropdown options
+  const options = variableNames.map((name, index) => (
+    <option key={index} value={name}>
+      {name}
+    </option>
+  ));
+
+  // handle dropdown changes
+  const handleXChange = (event) => {
+    const varName = event.target.value;
+    if (varName !== yVar) {
+      setXVar(varName);
     }
   };
 
-  const handleYAxisChange = (e) => {
-    const selectedYAxis = e.target.value;
-    if (selectedYAxis !== xAxis) {
-      setYAxis(selectedYAxis);
+  const handleYChange = (event) => {
+    const varName = event.target.value;
+    if (varName !== xVar) {
+      setYVar(varName);
     }
   };
 
   return (
     <div>
-      <p>Two Dimensional Analysis</p>
-      <label htmlFor="x-axis-dropdown">X Axis:</label>
-      <select id="x-axis-dropdown" value={xAxis} onChange={handleXAxisChange}>
-        {headers.map((header) => (
-          <option key={header} value={header}>
-            {header}
-          </option>
-        ))}
-      </select>
-
-      <label htmlFor="y-axis-dropdown">Y Axis:</label>
-      <select id="y-axis-dropdown" value={yAxis} onChange={handleYAxisChange}>
-        {headers.map((header) => (
-          <option key={header} value={header}>
-            {header}
-          </option>
-        ))}
-      </select>
-
-      <div>Graph will be rendered here</div>
+      <h2>Data Visualizer</h2>
+      <div>
+        <label htmlFor="x-axis">X-Axis: </label>
+        <select id="x-axis" value={xVar} onChange={handleXChange}>
+          <option value="">Select Variable</option>
+          {options}
+        </select>
+      </div>
+      <div>
+        <label htmlFor="y-axis">Y-Axis: </label>
+        <select id="y-axis" value={yVar} onChange={handleYChange}>
+          <option value="">Select Variable</option>
+          {options}
+        </select>
+      </div>
     </div>
   );
 }
+
+export default DataVisualizer;

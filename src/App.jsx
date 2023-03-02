@@ -18,6 +18,7 @@ function App() {
   Var9, Categorical, Category count = 5 A = 23 B = 33 C = 13, 0`;
 
   const rows = sampleData.split("\n").map((row) => row.split(","));
+  console.log(rows);
 
   return (
     <div className="app">
