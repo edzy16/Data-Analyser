@@ -1,8 +1,6 @@
     import React from "react";
     import "./App.css";
-    import DataTable from "./components/DataTable";
     import DataTaker from "./components/DataTaker";
-    import DataVisualizer from "./components/DataVisualizer";
 
 
     function App() {
