@@ -1,10 +1,11 @@
 import React, { useState } from "react";
 import * as XLSX from "xlsx";
+import DataItem from "./DataItem.jsx";
+import DataPlotter from "./DataPlotter.jsx";
 
-function DataUploader(props) {
-  const [file, setFile] = useState(null);
-
+const DataUploader = (props) => {
   const [fileName, setFileName] = useState(null);
+  const [xlsxData, setXlsxData] = useState([]);
 
   const acceptableFileNames = ["xlsx", "xls", "csv"];
 
@@ -25,23 +26,26 @@ function DataUploader(props) {
       alert("Invalid file type. Please upload a .csv, .xls, or .xlsx file.");
       return;
     }
-
     setFileName(myfile.name);
+
     const data = await myfile.arrayBuffer();
     const workbook = XLSX.readFile(data);
     const worksheet = workbook.Sheets[workbook.SheetNames[0]];
     const jsonData = XLSX.utils.sheet_to_json(worksheet, {
+      blankrows:"",
       header: 1,
       defval: "",
     });
-    console.log(jsonData.length);
-    console.log(jsonData);
+    setXlsxData(jsonData);
   };
+
+
   return (
     <div className="container">
-      <h1>Tx Analyzer</h1>
-      <div className="row">
-        <label className="instructionText1">Please upload a file:</label>
+      <h1 className="text-danger text-center">Tx Analyzer</h1>
+      <div className="hfcc">
+        <label className="instructionText1">Please upload a file :</label>
+        {fileName && <p className="text-success" style={{ paddingLeft:'1rem' }}>{fileName}</p>}
         <input
           className="uploaderButton"
           type="file"
@@ -49,7 +53,9 @@ function DataUploader(props) {
           onChange={(e) => handleFileUpload(e)}
         />
       </div>
+      <DataItem data={xlsxData} />
+      <DataPlotter data={xlsxData} />
     </div>
   );
-}
+};
 export default DataUploader;
