@@ -1,54 +1,82 @@
 import React, { useState } from "react";
+import { Chart } from "react-google-charts";
 
-function DataVisualizer({ data }) {
-  const [xVar, setXVar] = useState("");
-  const [yVar, setYVar] = useState("");
+const DataVisualizer = ({ data }) => {
+  if (data.length === 0) return null;
+  const [xAxis, setXAxis] = useState("");
+  const [yAxis, setYAxis] = useState("");
 
-  // extract variable names from the sample data
-  const header = data[0];
-  const variableNames = header.map((name) => name.trim());
+  const headers = data[0];
+  const numericalHeaders = headers.filter((header) => {
+    return data
+      .slice(1)
+      .every((row) => typeof row[headers.indexOf(header)] === "number");
+  });
 
-  // create dropdown options
-  const options = variableNames.map((name, index) => (
-    <option key={index} value={name}>
-      {name}
-    </option>
-  ));
-
-  // handle dropdown changes
-  const handleXChange = (event) => {
-    const varName = event.target.value;
-    if (varName !== yVar) {
-      setXVar(varName);
-    }
+  const options = {
+    title: "Numerical Data Scatter Plot",
+    hAxis: { title: xAxis },
+    vAxis: { title: yAxis },
+    legend: "none",
   };
 
-  const handleYChange = (event) => {
-    const varName = event.target.value;
-    if (varName !== xVar) {
-      setYVar(varName);
-    }
-  };
+  const dataPoints = data.slice(1).map((row) => {
+    return [row[headers.indexOf(xAxis)], row[headers.indexOf(yAxis)]];
+  });
 
   return (
-    <div>
-      <h2>Data Visualizer</h2>
-      <div>
-        <label htmlFor="x-axis">X-Axis: </label>
-        <select id="x-axis" value={xVar} onChange={handleXChange}>
-          <option value="">Select Variable</option>
-          {options}
-        </select>
+    <div className="container mt-3">
+      <div className="row">
+        <div className="col-md-6">
+          <div className="form-group">
+            <label htmlFor="xAxis">Select X Axis</label>
+            <select
+              className="form-control"
+              id="xAxis"
+              value={xAxis}
+              onChange={(e) => setXAxis(e.target.value)}
+            >
+              <option value="">Select X Axis</option>
+              {numericalHeaders.map((header, index) => (
+                <option key={index} value={header}>
+                  {header}
+                </option>
+              ))}
+            </select>
+          </div>
+        </div>
+        <div className="col-md-6">
+          <div className="form-group">
+            <label htmlFor="yAxis">Select Y Axis</label>
+            <select
+              className="form-control"
+              id="yAxis"
+              value={yAxis}
+              onChange={(e) => setYAxis(e.target.value)}
+            >
+              <option value="">Select Y Axis</option>
+              {numericalHeaders.map((header, index) => (
+                <option key={index} value={header}>
+                  {header}
+                </option>
+              ))}
+            </select>
+          </div>
+        </div>
       </div>
-      <div>
-        <label htmlFor="y-axis">Y-Axis: </label>
-        <select id="y-axis" value={yVar} onChange={handleYChange}>
-          <option value="">Select Variable</option>
-          {options}
-        </select>
-      </div>
+      {xAxis && yAxis && (
+        <Chart
+          width={"100%"}
+          height={"400px"}
+          chartType="ScatterChart"
+          loader={<div>Loading Chart...</div>}
+          data={[["x", "y"], ...dataPoints]}
+          options={options}
+          rootProps={{ "data-testid": "1" }}
+        />
+      )}
     </div>
   );
-}
+};
 
 export default DataVisualizer;
