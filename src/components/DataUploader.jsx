@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import * as XLSX from "xlsx";
+import DataTable from "./DataTable.jsx";
 import DataItem from "./DataItem.jsx";
 import DataPlotter from "./DataPlotter.jsx";
 
@@ -53,8 +54,9 @@ const DataUploader = (props) => {
           onChange={(e) => handleFileUpload(e)}
         />
       </div>
-      <DataItem data={xlsxData} />
-      <DataPlotter data={xlsxData} />
+      <DataTable data={xlsxData} />
+      {/* <DataItem data={xlsxData} />
+      <DataPlotter data={xlsxData} /> */}
     </div>
   );
 };
