@@ -1,5 +1,4 @@
-import React, { useState } from "react";
-
+import React, { useState } from 'react';
 const DataItem = ({ data }) => {
   if (data.length === 0) return null;
   console.log("data", data);
